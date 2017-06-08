@@ -107,7 +107,8 @@ namespace ReadFile
                 });
 
                 string data = File.ReadAllText(filepath);
-                foreach(string row in data.Split('\r'))
+                data = data.Replace("\r", "\n");
+                foreach(string row in data.Split('\n'))
                 {
                     if(!string.IsNullOrEmpty(row))
                     {
