@@ -27,7 +27,7 @@ namespace ReadFile
                 FileUpload1.SaveAs(filepath);
 
                 //Add columns to Datatable to bind data
-                DataTable dt = new DataTable("mtsnew");
+                DataTable dt = new DataTable("MTSNew");
                 dt.Columns.AddRange(new DataColumn[8]
                 {
                 new DataColumn("DatePosted",typeof(string)),
@@ -67,7 +67,7 @@ namespace ReadFile
                     using (SqlBulkCopy sqlbkcpy = new SqlBulkCopy(sqlconn))
                     {
                         //set the db table name in which data to be added
-                        sqlbkcpy.DestinationTableName = "mtsnew";
+                        sqlbkcpy.DestinationTableName = "MTSNew";
                         sqlconn.Open();
                         //copy all the rows from datatable to the destination db
                         sqlbkcpy.WriteToServer(dt);

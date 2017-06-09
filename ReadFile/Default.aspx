@@ -6,6 +6,7 @@
     <br />
     <div>
         <asp:FileUpload ID="FileUpload1" runat="server" />
+        <br/>
         <asp:Button ID="Button1" runat="server" Text="Import Data" OnClick="Button1_Click" />
         <br />
         <asp:Label ID="lblMsg" runat="server"></asp:Label>
