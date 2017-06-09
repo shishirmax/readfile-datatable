@@ -15,7 +15,7 @@ namespace ReadFile
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         protected void BtnMCData_Click(object sender, EventArgs e)
@@ -134,7 +134,7 @@ namespace ReadFile
                         sqlbkcpy.WriteToServer(dt);
                         sqlcon.Close();
                         lblMsg.Text = "MasterCard File Imported into DataBase";
-                        lblMsg.ForeColor = System.Drawing.Color.Green;
+                        lblMsg.ForeColor = System.Drawing.Color.Green;                        
                     }
                 }
             }
@@ -143,6 +143,54 @@ namespace ReadFile
                 lblMsg.Text = "Please upload valid file with .txt extension";
                 lblMsg.ForeColor = System.Drawing.Color.Red;
             }
+        }
+
+        protected void ExportBtn_Click(object sender, EventArgs e)
+        {
+            string conStr = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
+            using (SqlConnection con = new SqlConnection(conStr))
+            {
+                using (SqlCommand cmd = new SqlCommand("SP_MasterCardUpdate;select * from MasterCard"))
+                {
+                    using (SqlDataAdapter sda = new SqlDataAdapter())
+                    {
+                        cmd.Connection = con;
+                        sda.SelectCommand = cmd;
+                        using (DataTable dt = new DataTable())
+                        {
+                            sda.Fill(dt);
+                            string csv = string.Empty;
+
+                            foreach(DataColumn column in dt.Columns)
+                            {
+                                csv += column.ColumnName + ',';
+                            }
+                            csv += "\r\n";
+                            foreach(DataRow row in dt.Rows)
+                            {
+                                foreach(DataColumn column in dt.Columns)
+                                {
+                                    csv += row[column.ColumnName].ToString().Replace(",", ";") + ',';
+
+                                }
+                                csv += "\r\n";
+                            }
+                            Response.Clear();
+                            Response.Buffer = true;
+                            Response.AddHeader("content-disposition", "attachment;filename=MasterCardFile.csv");
+                            Response.Charset = "";
+                            Response.ContentType = "spplication/text";
+                            Response.Output.Write(csv);
+                            Response.Flush();
+                            Response.End();
+
+                            lblMsg.Text = "Data Exported";
+                            lblMsg.ForeColor = System.Drawing.Color.Aqua;
+                        }
+                    }
+                }
+            }
+                
         }
     }
 }

@@ -6,6 +6,7 @@
         <asp:FileUpload ID="MCFileUpload" runat="server" />
         <br/>
         <asp:Button ID="BtnMCData" runat="server" Text="Import MasterCard" OnClick="BtnMCData_Click"/>
+        &nbsp;<asp:Button ID="ExportBtn" runat="server" OnClick="ExportBtn_Click" Text="Export Data" />
         <br />
         <asp:Label ID="lblMsg" runat="server"></asp:Label>
     </div>
