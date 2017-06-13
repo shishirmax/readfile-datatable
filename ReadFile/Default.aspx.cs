@@ -8,6 +8,7 @@ using System.IO;
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
+using System.Text.RegularExpressions;
 
 namespace ReadFile
 {
@@ -44,14 +45,28 @@ namespace ReadFile
                 string data = File.ReadAllText(filepath);               
                 //iterate over each row and split it to new line.
                 foreach (string row in data.Split('\n'))
-                {
+                {             
                     //check for is null or empty row record
                     if (!string.IsNullOrEmpty(row))
                     {
                         //add rows                        
                         dt.Rows.Add();
                         int i = 0;
-                        foreach (string cell in row.Split(','))
+                        int count = 0;
+                        var replacedline = "";
+                        var line = Regex.Split(row, "\"(,\")?");
+                        for(var j=0;j<line.Length;j++)
+                        {
+                            if((count)%2 == 1)
+                            {
+                                line[j] = line[j].Replace(",","");
+                            }
+                            replacedline = string.Join("", line);
+                            count = count + 1;
+                        }
+
+                        foreach (string cell in replacedline.Split(','))
+                        //foreach (string cell in row.Regex.Split("\"(,\")?"))
                         {
                             dt.Rows[dt.Rows.Count - 1][i] = cell;
                             i++;
